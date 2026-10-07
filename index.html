@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Math Matrix - Stand de Matemáticas Espacial</title>
+    <!-- Favicon -->
+    <link rel="icon" type="image/svg+xml" href="noelizz.svg">
+    <style>
+        :root {
+            /* Paleta Galáctica / Espacial */
+            --space-bg: #050512;
+            --nebula-purple: #1a0b2e;
+            --nebula-blue: #0f1c3f;
+            --card-bg: rgba(18, 22, 48, 0.85);
+            --accent-cyan: #00f0ff;
+            --accent-magenta: #e024ff;
+            --accent-gold: #ffd700;
+            --text-main: #f0f4f8;
+            --text-muted: #a0aec0;
+            --border-glow: rgba(0, 240, 255, 0.35);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background-color: var(--space-bg); 
+            background-image: 
+                radial-gradient(circle at 15% 20%, rgba(224, 36, 255, 0.18) 0%, transparent 40%),
+                radial-gradient(circle at 85% 80%, rgba(0, 240, 255, 0.18) 0%, transparent 40%),
+                radial-gradient(1.5px 1.5px at 100px 50px, #fff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 200px 150px, #fff, rgba(0,0,0,0)),
+                radial-gradient(1px 1px at 300px 250px, #e024ff, rgba(0,0,0,0)),
+                radial-gradient(2px 2px at 400px 100px, #00f0ff, rgba(0,0,0,0)),
+                radial-gradient(1.5px 1.5px at 500px 350px, #fff, rgba(0,0,0,0));
+            background-repeat: repeat;
+            background-size: cover, cover, 550px 550px, 550px 550px, 550px 550px, 550px 550px, 550px 550px;
+            color: var(--text-main); 
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .header-title {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .header-title h1 { 
+            font-size: 2.5rem; 
+            color: #ffffff; 
+            text-shadow: 0 0 10px var(--accent-cyan), 0 0 25px rgba(0, 240, 255, 0.6); 
+            letter-spacing: 2px;
+        }
+        .header-title p { color: var(--text-muted); font-size: 1.1rem; }
+
+        /* Layout Principal */
+        .main-container {
+            display: grid;
+            grid-template-columns: 1fr 420px;
+            gap: 20px;
+            max-width: 1250px;
+            margin: 0 auto;
+        }
+
+        @media (max-width: 950px) {
+            .main-container { grid-template-columns: 1fr; }
+        }
+
+        /* Card del Juego */
+        .card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glow);
+            padding: 30px; 
+            border-radius: 16px; 
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 20px rgba(0, 240, 255, 0.15); 
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            min-height: 540px;
+            position: relative;
+        }
+
+        h2 {
+            color: #ffffff;
+            text-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .btn { 
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.25), rgba(224, 36, 255, 0.25)); 
+            color: #fff; 
+            font-weight: bold; 
+            border: 1px solid var(--accent-cyan); 
+            padding: 14px 20px; 
+            margin: 8px 4px; 
+            border-radius: 8px; 
+            cursor: pointer; 
+            font-size: 16px; 
+            transition: all 0.3s ease; 
+            box-shadow: 0 0 12px rgba(0, 240, 255, 0.3);
+            text-transform: uppercase;
+        }
+        .btn:hover { 
+            background: linear-gradient(135deg, var(--accent-cyan), var(--accent-magenta)); 
+            transform: translateY(-2px); 
+            box-shadow: 0 0 20px var(--accent-cyan), 0 0 30px var(--accent-magenta); 
+        }
+        
+        .btn-game-choice {
+            background: rgba(15, 28, 63, 0.8);
+            color: #fff;
+            border: 2px solid var(--accent-cyan);
+            padding: 16px 20px;
+            margin: 8px;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.2);
+        }
+        .btn-game-choice:hover {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.4), rgba(224, 36, 255, 0.4));
+            transform: scale(1.03);
+            box-shadow: 0 0 20px var(--accent-cyan), 0 0 25px var(--accent-magenta);
+        }
+
+        .btn-opt { 
+            display: block; 
+            width: 100%; 
+            margin: 10px 0; 
+            background: rgba(26, 38, 74, 0.8); 
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            color: #fff; 
+            text-align: left; 
+            padding: 16px; 
+            border-radius: 8px;
+            font-size: 17px;
+            box-shadow: none;
+            transition: all 0.2s ease;
+            text-transform: none;
+        }
+        .btn-opt:hover { 
+            background: rgba(38, 55, 105, 0.9); 
+            border-color: var(--accent-cyan);
+            box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        .btn-opt.correct-ans {
+            background: rgba(34, 197, 94, 0.3) !important;
+            color: #ffffff !important;
+            border: 2px solid #4ade80 !important;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(74, 222, 128, 0.5) !important;
+        }
+
+        .btn-opt.wrong-ans {
+            background: rgba(239, 68, 68, 0.3) !important;
+            color: #ffffff !important;
+            border: 2px solid #f87171 !important;
+            font-weight: bold;
+            box-shadow: 0 0 15px rgba(248, 113, 113, 0.5) !important;
+        }
+
+        .feedback-message {
+            font-size: 20px;
+            font-weight: bold;
+            min-height: 32px;
+            margin-top: 10px;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .feedback-correct { color: #4ade80; text-shadow: 0 0 12px rgba(74, 222, 128, 0.6); }
+        .feedback-wrong { color: #f43f5e; text-shadow: 0 0 12px rgba(244, 63, 94, 0.6); }
+
+        .timer { font-size: 26px; color: #f43f5e; font-weight: bold; margin: 15px 0; text-shadow: 0 0 10px rgba(244, 63, 94, 0.5); }
+        .score { font-size: 22px; color: var(--accent-cyan); font-weight: bold; text-shadow: 0 0 10px var(--accent-cyan); }
+
+        /* Panel de Rankings Lateral */
+        .ranking-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid var(--border-glow);
+            padding: 20px;
+            border-radius: 16px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.7), 0 0 20px rgba(0, 240, 255, 0.15);
+        }
+
+        .ranking-card h2 {
+            text-align: center;
+            color: var(--accent-gold);
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            text-shadow: 0 0 10px var(--accent-gold);
+        }
+
+        .tabs { display: flex; gap: 4px; margin-bottom: 15px; }
+
+        .tab-btn {
+            flex: 1; padding: 8px 4px; background: rgba(26, 38, 74, 0.8);
+            color: var(--text-muted); border: 1px solid rgba(0, 240, 255, 0.2);
+            border-radius: 6px; cursor: pointer; font-size: 13px; font-weight: bold; transition: all 0.2s ease;
+        }
+
+        .tab-btn.active {
+            background: var(--accent-cyan); color: #050512;
+            border-color: var(--accent-cyan); box-shadow: 0 0 10px var(--accent-cyan);
+        }
+
+        .ranking-table { width: 100%; border-collapse: collapse; font-size: 14px; }
+        .ranking-table th, .ranking-table td { padding: 8px 6px; text-align: left; border-bottom: 1px solid rgba(0, 240, 255, 0.15); }
+        .ranking-table th { color: var(--accent-cyan); }
+        .ranking-table tr:nth-child(1) td { color: var(--accent-gold); font-weight: bold; text-shadow: 0 0 8px var(--accent-gold); }
+        .ranking-table tr:nth-child(2) td { color: #e2e8f0; font-weight: bold; }
+        .ranking-table tr:nth-child(3) td { color: #f97316; font-weight: bold; }
+
+        .input-group { display: flex; gap: 10px; margin: 15px 0; }
+
+        .input-field {
+            flex: 1; padding: 12px; border-radius: 8px; border: 1px solid var(--accent-cyan);
+            background: rgba(5, 5, 18, 0.8); color: #fff; font-size: 15px; text-align: center; box-shadow: 0 0 8px rgba(0, 240, 255, 0.2);
+        }
+
+        /* ESTILOS DEL VIAJE ESPACIAL (CANVAS) */
+        #spaceTravelCanvas {
+            background: #030712;
+            border: 2px solid var(--accent-cyan);
+            border-radius: 12px;
+            margin: 10px 0;
+            box-shadow: 0 0 25px rgba(0, 240, 255, 0.3);
+            width: 100%;
+            max-width: 600px;
+            height: 300px;
+        }
+
+        /* Modales */
+        .modal {
+            display: none; position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(5, 5, 18, 0.95); border-radius: 16px; flex-direction: column;
+            justify-content: center; align-items: center; padding: 20px; z-index: 100; backdrop-filter: blur(8px);
+        }
+
+        #cannonCanvas, #frogCanvas {
+            background: #020617; border: 2px solid var(--accent-cyan); border-radius: 12px;
+            margin: 10px 0; box-shadow: 0 0 20px rgba(0, 240, 255, 0.3); cursor: pointer;
+        }
+
+        /* Estilos Cofres */
+        .chests-container { display: flex; gap: 20px; margin: 30px 0; }
+
+        .chest-box {
+            width: 110px; height: 110px; background: rgba(26, 38, 74, 0.8); border: 3px solid var(--accent-gold);
+            border-radius: 16px; display: flex; flex-direction: column; align-items: center; justify-content: center;
+            font-size: 45px; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .chest-box:hover {
+            transform: translateY(-8px) scale(1.05); background: rgba(38, 55, 105, 0.9); box-shadow: 0 0 25px rgba(255, 215, 0, 0.7);
+        }
+
+        /* Barra de Potencia */
+        .power-bar-container {
+            width: 320px; height: 22px; background: rgba(5, 5, 18, 0.8); border: 2px solid var(--accent-cyan);
+            border-radius: 12px; overflow: hidden; margin: 10px 0; position: relative; box-shadow: 0 0 10px rgba(0, 240, 255, 0.3);
+        }
+
+        .power-bar-fill {
+            height: 100%; width: 0%; background: linear-gradient(90deg, #4ade80, #facc15, #f43f5e); transition: width 0.05s linear;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header-title">
+        <h1>🚀 Math Matrix 🌌</h1>
+        <p>Desafío Interactivo de Matemáticas Espaciales</p>
+    </div>
+
+    <div class="main-container">
+        
+        <!-- SECCIÓN DEL JUEGO -->
+        <div class="card">
+            
+            <!-- Seleccionar Nivel -->
+            <div id="setup" style="text-align: center;">
+                <h2>¡Demuestra tus habilidades!</h2>
+                <p style="margin: 15px 0; color: #cbd5e1;">Selecciona tu nivel para comenzar:</p>
+                <div>
+                    <button class="btn" onclick="start(1)">1.º Medio</button>
+                    <button class="btn" onclick="start(2)">2.º Medio</button>
+                    <button class="btn" onclick="start(3)">3.º Medio</button>
+                    <button class="btn" onclick="start(4)">4.º Medio</button>
+                </div>
+            </div>
+
+            <!-- Pantalla de Juego Activa -->
+            <div id="game" style="display:none; text-align: center;">
+                <div style="display: flex; justify-content: space-between; align-items: center;">
+                    <div class="score">Puntos: <span id="pts">0</span></div>
+                    <div class="timer">⏳ <span id="time">60</span>s</div>
+                </div>
+                <h2 id="q-text" style="margin: 20px 0; font-size: 22px;">Cargando pregunta...</h2>
+                <div id="opts"></div>
+                <div id="feedback-msg" class="feedback-message"></div>
+            </div>
+
+            <!-- Registro de Puntaje Final -->
+            <div id="end" style="display:none; text-align: center;">
+                <h2 style="color: #f43f5e; font-size: 28px;">¡Tiempo Agotado! 🏁</h2>
+                <p style="margin-top: 10px;">Obtuviste un total de:</p>
+                <div style="font-size: 36px; color: #4ade80; font-weight: bold; margin: 10px 0; text-shadow: 0 0 10px rgba(74,222,128,0.5);">
+                    <span id="final-pts">0</span> pts
+                </div>
+                
+                <p style="margin-top: 10px; color: #cbd5e1;">Ingresa tus datos para registrarte en el Ranking:</p>
+                
+                <div class="input-group">
+                    <input type="text" id="player-name" class="input-field" placeholder="Nombre (ej: Matías)" maxlength="15">
+                    <input type="text" id="player-class" class="input-field" placeholder="Curso (ej: 1°M A)" maxlength="10">
+                </div>
+                
+                <button class="btn" onclick="saveScore()">💾 Guardar Puntaje</button>
+            </div>
+
+            <!-- SECCIÓN DEL VIAJE EN COHETE -->
+            <div id="space-travel-screen" style="display:none; text-align: center;">
+                <h2 style="color: var(--accent-cyan); font-size: 24px; margin-bottom: 5px;">🚀 Despegue de la Nave Espacial</h2>
+                <p id="travel-desc" style="color: #cbd5e1; font-size: 14px;">Calculando la trayectoria de tu viaje espacial...</p>
+                
+                <canvas id="spaceTravelCanvas" width="600" height="300"></canvas>
+                
+                <div id="travel-result" style="font-size: 18px; font-weight: bold; color: var(--accent-gold); min-height: 28px; margin-top: 5px;"></div>
+
+                <button id="next-to-minigames-btn" class="btn" style="display:none; margin-top: 10px; background: linear-gradient(135deg, #22c55e, #16a34a); border-color: #4ade80;" onclick="goToMinigames()">
+                    Siguiente ➡️
+                </button>
+            </div>
+
+            <!-- SELECCIÓN DE MINIJUEGO DE LA SUERTE -->
+            <div id="game-selection" style="display:none; text-align: center;">
+                <h2 style="color: var(--accent-gold); font-size: 26px;">🎉 ¡Minijuegos de la Suerte!</h2>
+                <p style="margin: 15px 0; color: #cbd5e1;">Elige una opción para probar tu suerte y descubrir tu premio:</p>
+                
+                <div style="display: flex; flex-direction: column; max-width: 400px; margin: 0 auto;">
+                    <button class="btn-game-choice" onclick="openCannonModal()">
+                        🚀 Lanzamiento de Proyectil
+                    </button>
+                    <button class="btn-game-choice" onclick="openFrogModal()">
+                        🐸 Salto de la Rana al Agua
+                    </button>
+                    <button class="btn-game-choice" onclick="openChestModal()">
+                        🎁 Cofres Mágicos
+                    </button>
+                </div>
+            </div>
+
+            <!-- MODAL 1: LANZAMIENTO DE PROYECTIL -->
+            <div id="projectile-modal" class="modal">
+                <h2 style="color: var(--accent-gold); text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);">🚀 Lanzamiento de Proyectil</h2>
+                <p style="color: #cbd5e1; font-size: 14px; margin-top: 2px;">¡Calcula el ángulo y presiona el botón en el segundo preciso!</p>
+                
+                <canvas id="cannonCanvas" width="540" height="290"></canvas>
+                
+                <div id="prize-result" style="font-size: 22px; font-weight: bold; min-height: 32px; margin-bottom: 8px;"></div>
+                
+                <button id="fire-btn" class="btn" onclick="fireCannon()">🎯 ¡DISPARAR PROYECTIL!</button>
+                <button id="close-modal-btn" class="btn" style="display:none; background: #4ade80; color: #0f172a;" onclick="closeModalAndReset()">Volver al Menú Principal</button>
+            </div>
+
+            <!-- MODAL 2: SALTO DE LA RANA -->
+            <div id="frog-modal" class="modal">
+                <h2 style="color: #4ade80; text-shadow: 0 0 10px rgba(74, 222, 128, 0.4);">🐸 Salto de la Rana al Estanque</h2>
+                <p id="frog-instruction" style="color: #cbd5e1; font-size: 14px; margin-top: 2px;">¡Haz clic en la pantalla para fijar la DIRECCIÓN del salto!</p>
+                
+                <canvas id="frogCanvas" width="540" height="270" onclick="handleFrogClick()"></canvas>
+                
+                <div class="power-bar-container">
+                    <div id="power-fill" class="power-bar-fill"></div>
+                </div>
+
+                <div id="frog-result" style="font-size: 20px; font-weight: bold; min-height: 30px; margin-bottom: 5px;"></div>
+                
+                <button id="close-frog-btn" class="btn" style="display:none; background: #4ade80; color: #0f172a;" onclick="closeModalAndReset()">Volver al Menú Principal</button>
+            </div>
+
+            <!-- MODAL 3: COFRES MÁGICOS -->
+            <div id="chest-modal" class="modal">
+                <h2 style="color: var(--accent-gold); text-shadow: 0 0 10px rgba(251, 191, 36, 0.4);">🎁 Cofres Mágicos</h2>
+                <p style="color: #cbd5e1; font-size: 15px; margin-top: 5px;">¡Elige 1 de los 3 cofres para descubrir tu premio!</p>
+                
+                <div class="chests-container">
+                    <div class="chest-box" onclick="openChest(0)" id="chest-0">📦</div>
+                    <div class="chest-box" onclick="openChest(1)" id="chest-1">📦</div>
+                    <div class="chest-box" onclick="openChest(2)" id="chest-2">📦</div>
+                </div>
+
+                <div id="chest-result" style="font-size: 22px; font-weight: bold; min-height: 35px; margin-bottom: 15px;"></div>
+
+                <button id="close-chest-btn" class="btn" style="display:none; background: #4ade80; color: #0f172a;" onclick="closeModalAndReset()">Volver al Menú Principal</button>
+            </div>
+
+        </div>
+
+        <!-- PANEL DE RANKINGS -->
+        <div class="ranking-card">
+            <h2>🏆 TOP 10 RANKING</h2>
+            
+            <div class="tabs">
+                <button class="tab-btn active" onclick="switchTab(1)">1.º M</button>
+                <button class="tab-btn" onclick="switchTab(2)">2.º M</button>
+                <button class="tab-btn" onclick="switchTab(3)">3.º M</button>
+                <button class="tab-btn" onclick="switchTab(4)">4.º M</button>
+            </div>
+
+            <table class="ranking-table">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">#</th>
+                        <th style="width: 45%;">Nombre</th>
+                        <th style="width: 25%;">Curso</th>
+                        <th style="width: 20%;">Pts</th>
+                    </tr>
+                </thead>
+                <tbody id="ranking-body">
+                </tbody>
+            </table>
+            
+            <div style="text-align: right; margin-top: 15px;">
+                <button onclick="clearRankings()" style="background: none; border: none; color: #64748b; font-size: 11px; cursor: pointer; text-decoration: underline;">
+                    Reiniciar Rankings del Stand
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <script>
+        const bank = {
+            1: [
+                // --- 1.º MEDIO (80 Preguntas) ---
+                {q: "¿Cuál es el resultado de -7 + 12?", o: ["5", "-5", "19", "-19"], a: 0},
+                {q: "¿Cuál es el valor de x en 3x - 5 = 10?", o: ["x = 5", "x = 3", "x = 15", "x = 2"], a: 0},
+                {q: "Si un triángulo rectángulo tiene catetos 3 y 4, ¿cuánto mide la hipotenusa?", o: ["5", "7", "6", "25"], a: 0},
+                {q: "El desarrollo del producto notable (a + b)² es:", o: ["a² + 2ab + b²", "a² + b²", "a² - 2ab + b²", "2a + 2b"], a: 0},
+                {q: "¿Cuál es el valor de (-2)³?", o: ["-8", "8", "-6", "6"], a: 0},
+                {q: "¿Cuánto es el 20% de 150?", o: ["30", "20", "25", "15"], a: 0},
+                {q: "Si a = 3 y b = -2, ¿cuál es el valor de 2a - 3b?", o: ["12", "0", "6", "-12"], a: 0},
+                {q: "¿Cuál es la simplificación de (x³ · x⁴)?", o: ["x⁷", "x¹²", "x", "x³⁴"], a: 0},
+                {q: "¿Cuál es el perímetro de un cuadrado de área 36 cm²?", o: ["24 cm", "12 cm", "36 cm", "18 cm"], a: 0},
+                {q: "El producto notable (x - 5)(x + 5) equivale a:", o: ["x² - 25", "x² + 25", "x² - 10x + 25", "x² - 5"], a: 0},
+                {q: "¿Cuál es el inverso aditivo de -8?", o: ["8", "-8", "1/8", "-1/8"], a: 0},
+                {q: "¿Cuál es el inverso multiplicativo de 3/4?", o: ["4/3", "-3/4", "-4/3", "3/4"], a: 0},
+                {q: "Al resolver 2(x - 3) = 8, el valor de x es:", o: ["7", "4", "5", "11"], a: 0},
+                {q: "¿A qué fracción equivale el decimal periódico 0,333...?", o: ["1/3", "3/10", "3/100", "1/30"], a: 0},
+                {q: "En un mapa a escala 1:100, 5 cm representan en la realidad:", o: ["5 metros", "50 metros", "500 metros", "0,5 metros"], a: 0},
+                {q: "¿Cuál es la media aritmética (promedio) de 4, 8, 12 y 16?", o: ["10", "8", "12", "14"], a: 0},
+                {q: "¿Cuál es la moda de la serie: 3, 5, 5, 7, 8, 5, 9?", o: ["5", "7", "6", "8"], a: 0},
+                {q: "¿Cuántos grados suman los ángulos interiores de un pentágono convexo?", o: ["540°", "360°", "180°", "720°"], a: 0},
+                {q: "Si 4 chocolates cuestan $2.000, ¿cuánto cuestan 7 chocolates?", o: ["$3.500", "$3.000", "$4.000", "$2.800"], a: 0},
+                {q: "¿Cuál es el valor de 5⁰?", o: ["1", "0", "5", "10"], a: 0},
+                {q: "¿Cuánto es 2/3 + 1/4?", o: ["11/12", "3/7", "3/12", "8/12"], a: 0},
+                {q: "¿Qué porcentaje es 15 de 60?", o: ["25%", "15%", "30%", "20%"], a: 0},
+                {q: "Si el área de un círculo es 16π cm², ¿cuánto mide su radio?", o: ["4 cm", "8 cm", "2 cm", "16 cm"], a: 0},
+                {q: "¿Cuál es la solución de x/4 = 9?", o: ["36", "13", "2.25", "32"], a: 0},
+                {q: "Factoriza la expresión: x² + 6x + 9.", o: ["(x + 3)²", "(x - 3)²", "(x + 9)(x + 1)", "(x + 6)²"], a: 0},
+                {q: "¿Cuál es el MCD de 12 y 18?", o: ["6", "3", "36", "2"], a: 0},
+                {q: "¿Cuál es el MCM de 4 y 6?", o: ["12", "24", "2", "18"], a: 0},
+                {q: "En la ecuación 2x + 1 = x + 7, ¿cuánto vale x?", o: ["6", "8", "7", "5"], a: 0},
+                {q: "Si un ángulo mide 35°, ¿cuál es su ángulo complementario?", o: ["55°", "145°", "65°", "45°"], a: 0},
+                {q: "Si un ángulo mide 110°, ¿cuál es su ángulo suplementario?", o: ["70°", "80°", "90°", "20°"], a: 0},
+                {q: "¿Cuál es el resultado de (-3) · (-4) · (-2)?", o: ["-24", "24", "-12", "12"], a: 0},
+                {q: "¿A qué es igual 10⁻²?", o: ["0,01", "0,1", "-20", "-100"], a: 0},
+                {q: "El área de un rectángulo de base 8 cm y altura 5 cm es:", o: ["40 cm²", "26 cm²", "13 cm²", "20 cm²"], a: 0},
+                {q: "Si la mediana de un conjunto de datos ordenados de 5 elementos es el valor:", o: ["Tercero", "Segundo", "Cuarto", "Promedio"], a: 0},
+                {q: "Un auto recorre 180 km en 2 horas a velocidad constante. ¿Cuál es su velocidad?", o: ["90 km/h", "360 km/h", "80 km/h", "100 km/h"], a: 0},
+                {q: "Al simplificar 15/45 se obtiene:", o: ["1/3", "3/5", "1/5", "3/9"], a: 0},
+                {q: "¿Cuál es el valor de |-15|?", o: ["15", "-15", "0", "1/15"], a: 0},
+                {q: "¿Cuántas caras tiene un cubo?", o: ["6", "8", "12", "4"], a: 0},
+                {q: "¿Cuántas aristas tiene una pirámide de base cuadrada?", o: ["8", "5", "6", "12"], a: 0},
+                {q: "Si el 50% de un número es 45, ¿cuál es el número?", o: ["90", "135", "180", "60"], a: 0},
+                {q: "¿Cuál es la expresión reducida de 3x + 2y - x + 5y?", o: ["2x + 7y", "4x + 7y", "5x + 3y", "2x + 3y"], a: 0},
+                {q: "El triple de un número aumentado en 4 se representa algebraicamente como:", o: ["3x + 4", "3(x + 4)", "x³ + 4", "x/3 + 4"], a: 0},
+                {q: "Si x = -1, ¿cuánto vale x² - x?", o: ["2", "0", "-2", "1"], a: 0},
+                {q: "¿Cuál es el área de un triángulo de base 10 cm y altura 6 cm?", o: ["30 cm²", "60 cm²", "16 cm²", "20 cm²"], a: 0},
+                {q: "¿Cuál es la suma de los tres ángulos internos de cualquier triángulo?", o: ["180°", "360°", "90°", "270°"], a: 0},
+                {q: "Si 3 obreros construyen un muro en 6 horas, ¿cuánto tardan 6 obreros (proporcionalidad inversa)?", o: ["3 horas", "12 horas", "2 horas", "4 horas"], a: 0},
+                {q: "Resuelve: 4² - 3²", o: ["7", "1", "25", "14"], a: 0},
+                {q: "¿Cuál es el valor decimal de 3/5?", o: ["0,6", "0,35", "0,5", "0,15"], a: 0},
+                {q: "¿Qué tipo de ángulo mide más de 90° y menos de 180°?", o: ["Obtuso", "Agudo", "Recto", "Llano"], a: 0},
+                {q: "¿Cuál de los siguientes números es primo?", o: ["17", "15", "21", "27"], a: 0},
+                {q: "¿Cuál es la raíz cuadrada de 81?", o: ["9", "81", "18", "3"], a: 0},
+                {q: "Si a/4 = 5/2, el valor de a es:", o: ["10", "8", "20", "5"], a: 0},
+                {q: "Al restar (5x - 3) - (2x + 4) resulta:", o: ["3x - 7", "3x + 1", "7x - 7", "3x + 7"], a: 0},
+                {q: "¿Cuál es el rango del conjunto de datos: 3, 9, 2, 12, 7?", o: ["10", "12", "5", "9"], a: 0},
+                {q: "Si una bolsa tiene 3 bolitas rojas y 7 azules, ¿cuál es la probabilidad de sacar una roja?", o: ["3/10", "7/10", "3/7", "1/3"], a: 0},
+                {q: "¿Cuál es la mitad de 2⁸?", o: ["2⁷", "1⁸", "2⁴", "2⁶"], a: 0},
+                {q: "En el término algebraico -5x³y², el coeficiente numérico es:", o: ["-5", "3", "2", "5"], a: 0},
+                {q: "¿Cuál es el valor de x en la ecuación x - 12 = -4?", o: ["8", "-16", "-8", "16"], a: 0},
+                {q: "El perímetro de un triángulo equilátero de lado 7 cm es:", o: ["21 cm", "14 cm", "49 cm", "28 cm"], a: 0},
+                {q: "¿Cuánto es (-1)¹⁰¹?", o: ["-1", "1", "101", "-101"], a: 0},
+                {q: "¿Cuál es la solución de 5x = 0?", o: ["0", "5", "-5", "No tiene solución"], a: 0},
+                {q: "Si una entrada cuesta $4.000 y tiene un 25% de descuento, ¿cuánto se paga?", o: ["$3.000", "$1.000", "$3.500", "$2.500"], a: 0},
+                {q: "¿Cuál es la suma de 0,4 + 0,06?", o: ["0,46", "0,10", "0,64", "1,0"], a: 0},
+                {q: "Si el diámetro de un círculo mide 10 cm, su radio mide:", o: ["5 cm", "20 cm", "10 cm", "2,5 cm"], a: 0},
+                {q: "¿Cuál de las siguientes expresiones representa un número par cualquiera (n entero)?", o: ["2n", "2n + 1", "n + 2", "n²"], a: 0},
+                {q: "Factoriza: 5x + 10y", o: ["5(x + 2y)", "10(x + y)", "5x(1 + 2y)", "x(5 + 10y)"], a: 0},
+                {q: "Un hexágono regular tiene cuántos lados:", o: ["6", "5", "8", "7"], a: 0},
+                {q: "¿Cuánto es √100 - √36?", o: ["4", "8", "64", "2"], a: 0},
+                {q: "Al lanzar una moneda al aire, ¿cuál es la probabilidad de obtener cara?", o: ["1/2", "1", "1/4", "0"], a: 0},
+                {q: "Si x/3 - 1 = 2, entonces x es igual a:", o: ["9", "3", "6", "1"], a: 0},
+                {q: "El área de un cuadrado es 81 cm². ¿Cuánto mide su lado?", o: ["9 cm", "18 cm", "27 cm", "40.5 cm"], a: 0},
+                {q: "¿Cuál es el grado del polinomio 4x³ + 2x⁵ - 7?", o: ["5", "3", "4", "8"], a: 0},
+                {q: "Si restamos -5 a 10, obtenemos:", o: ["15", "5", "-15", "-5"], a: 0},
+                {q: "¿Cuál es la tercera parte de 90?", o: ["30", "27", "15", "45"], a: 0},
+                {q: "El valor absoluto de 0 es:", o: ["0", "1", "No existe", "-0"], a: 0},
+                {q: "Si un rectángulo tiene lados a y b, su perímetro es:", o: ["2a + 2b", "a · b", "a + b", "a² + b²"], a: 0},
+                {q: "¿Cuál de estos números es divisible por 3?", o: ["123", "124", "125", "127"], a: 0},
+                {q: "La fracción 8/12 reducida a su máxima expresión es:", o: ["2/3", "4/6", "1/2", "3/4"], a: 0},
+                {q: "Si x + y = 10 y x = 3, ¿cuánto vale y?", o: ["7", "3", "13", "-7"], a: 0},
+                {q: "¿Cuál es el resultado de 2 + 3 · 4?", o: ["14", "20", "24", "10"], a: 0}
+            ],
+
+            2: [
+                // --- 2.º MEDIO (80 Preguntas) ---
+                {q: "¿Cuál es el valor de log₂(8)?", o: ["3", "4", "2", "8"], a: 0},
+                {q: "En la función cuadrática f(x) = x² - 4, sus ceros son:", o: ["2 y -2", "4 y -4", "Solo 0", "No tiene"], a: 0},
+                {q: "¿A cuánto equivale sin(30°)?", o: ["0,5", "1", "0,866", "0"], a: 0},
+                {q: "¿Cuál es la raíz cuadrada de 144?", o: ["12", "14", "10", "16"], a: 0},
+                {q: "¿Cuál es el valor de log₁₀(100)?", o: ["2", "10", "1", "100"], a: 0},
+                {q: "¿Cuál es el vértice de la parábola f(x) = x²?", o: ["(0, 0)", "(1, 1)", "(0, 1)", "(1, 0)"], a: 0},
+                {q: "Al simplificar la raíz √50 se obtiene:", o: ["5√2", "2√5", "25√2", "10√5"], a: 0},
+                {q: "¿Qué determina el signo de 'a' en f(x) = ax² + bx + c?", o: ["La concavidad de la parábola", "El corte con el eje Y", "La cantidad de soluciones", "El eje de simetría"], a: 0},
+                {q: "¿Cuál es el discriminante (Δ) de la ecuación x² - 4x + 4 = 0?", o: ["0", "16", "8", "-16"], a: 0},
+                {q: "Si el discriminante Δ > 0, la ecuación cuadrática tiene:", o: ["Dos soluciones reales y distintas", "Una solución real doble", "Sin soluciones reales", "Infinitas soluciones"], a: 0},
+                {q: "Racionaliza 1 / √3:", o: ["√3 / 3", "√3", "3 / √3", "1 / 3"], a: 0},
+                {q: "¿A cuánto equivale cos(60°)?", o: ["1/2", "√3/2", "√2/2", "1"], a: 0},
+                {q: "¿Cuál es el valor de log₃(81)?", o: ["4", "3", "27", "9"], a: 0},
+                {q: "En un triángulo rectángulo, tan(θ) se define como:", o: ["Cateto Opuesto / Cateto Adyacente", "Cateto Adyacente / Hipotenusa", "Cateto Opuesto / Hipotenusa", "Hipotenusa / Cateto Opuesto"], a: 0},
+                {q: "¿Cuál es la solución de √x = 7?", o: ["49", "14", "√7", "3.5"], a: 0},
+                {q: "¿Cuál es el corte con el eje Y de la función f(x) = 3x² - 5x + 7?", o: ["(0, 7)", "(0, 3)", "(0, -5)", "(7, 0)"], a: 0},
+                {q: "Si f(x) = 2x² - 3, ¿cuánto vale f(-2)?", o: ["5", "11", "-11", "1"], a: 0},
+                {q: "¿Cuál es la propiedad del logaritmo log(a · b)?", o: ["log(a) + log(b)", "log(a) · log(b)", "log(a) - log(b)", "b · log(a)"], a: 0},
+                {q: "El valor de log₅(1) es:", o: ["0", "1", "5", "Indefinido"], a: 0},
+                {q: "El valor de log₄(4) es:", o: ["1", "0", "4", "16"], a: 0},
+                {q: "¿A cuánto equivale √a · √b?", o: ["√(a · b)", "a · b", "√(a + b)", "2√(ab)"], a: 0},
+                {q: "En la ecuación x² - 9 = 0, sus soluciones son:", o: ["x = 3 y x = -3", "Solo x = 3", "x = 9 y x = -9", "No tiene solución"], a: 0},
+                {q: "La fórmula de la ecuación de segundo grado ax² + bx + c = 0 incluye en su numerador:", o: ["-b ± √(b² - 4ac)", "b ± √(b² - 4ac)", "-b ± √(b + 4ac)", "b² - 4ac"], a: 0},
+                {q: "¿Cuál es la pendiente de una recta horizontal?", o: ["0", "1", "Indefinida", "-1"], a: 0},
+                {q: "¿Cuál es la pendiente de una recta vertical?", o: ["Indefinida", "0", "1", "-1"], a: 0},
+                {q: "Si dos rectas son paralelas, sus pendientes m₁ y m₂ cumplen:", o: ["m₁ = m₂", "m₁ · m₂ = -1", "m₁ + m₂ = 0", "m₁ = -m₂"], a: 0},
+                {q: "Si dos rectas son perpendiculares, sus pendientes cumplen:", o: ["m₁ · m₂ = -1", "m₁ = m₂", "m₁ + m₂ = 1", "m₁ - m₂ = 0"], a: 0},
+                {q: "Simplifica la expresión (2√3)²:", o: ["12", "6", "36", "18"], a: 0},
+                {q: "El valor numérico de √18 + √8 es:", o: ["5√2", "√26", "10", "6√2"], a: 0},
+                {q: "¿A qué equivale log(aⁿ)?", o: ["n · log(a)", "log(a) / n", "log(a) + n", "a · log(n)"], a: 0},
+                {q: "¿Cuál de las siguientes expresiones representa una función cuadrática?", o: ["f(x) = x² + 2x + 1", "f(x) = 2x + 3", "f(x) = 2ˣ", "f(x) = 1/x"], a: 0},
+                {q: "En el triángulo rectángulo de catetos 6 y 8, la hipotenusa mide:", o: ["10", "14", "12", "100"], a: 0},
+                {q: "¿A qué es igual sin²(θ) + cos²(θ)?", o: ["1", "0", "2", "tan(θ)"], a: 0},
+                {q: "¿A cuánto equivale tan(45°)?", o: ["1", "0", "√3", "1/2"], a: 0},
+                {q: "¿Cuál es la distancia entre los puntos (0,0) y (3,4) en el plano cartesiano?", o: ["5", "7", "25", "1"], a: 0},
+                {q: "El punto medio entre (2, 4) y (6, 8) es:", o: ["(4, 6)", "(8, 12)", "(2, 2)", "(3, 4)"], a: 0},
+                {q: "Si log(x) = 3 (base 10), ¿cuánto vale x?", o: ["1000", "30", "100", "3"], a: 0},
+                {q: "¿Cuál es el valor de (∛27)?", o: ["3", "9", "81", "1"], a: 0},
+                {q: "Resuelve para x: x² = 25", o: ["x = 5 o x = -5", "Solo x = 5", "x = 625", "x = 12,5"], a: 0},
+                {q: "Escribe en forma de potencia la raíz ⁵√x³:", o: ["x^(3/5)", "x^(5/3)", "x⁸", "x¹⁵"], a: 0},
+                {q: "El eje de simetría de f(x) = a(x - h)² + k es:", o: ["x = h", "y = k", "x = -h", "y = -k"], a: 0},
+                {q: "¿Cuál es el dominio de la función real f(x) = √x?", o: ["x ≥ 0", "Todos los reales", "x > 0", "x ≤ 0"], a: 0},
+                {q: "El valor de log₂(1/2) es:", o: ["-1", "1", "0", "-2"], a: 0},
+                {q: "¿Cuál es el área de un círculo de radio 5 cm?", o: ["25π cm²", "10π cm²", "5π cm²", "100π cm²"], a: 0},
+                {q: "Si un cateto mide 5 y la hipotenusa 13, ¿cuánto mide el otro cateto?", o: ["12", "8", "10", "√194"], a: 0},
+                {q: "¿A qué es igual log(a / b)?", o: ["log(a) - log(b)", "log(a) / log(b)", "log(a) + log(b)", "log(a - b)"], a: 0},
+                {q: "¿Cuál es la forma canónica de la función cuadrática?", o: ["f(x) = a(x - h)² + k", "f(x) = ax² + bx + c", "f(x) = a(x - x₁)(x - x₂)", "f(x) = mx + b"], a: 0},
+                {q: "Racionaliza 6 / √2:", o: ["3√2", "6√2", "3", "√12"], a: 0},
+                {q: "Al elevar (√7)² el resultado es:", o: ["7", "49", "√14", "1"], a: 0},
+                {q: "El volumen de un cubo de lado 3 cm es:", o: ["27 cm³", "9 cm³", "18 cm³", "54 cm³"], a: 0},
+                {q: "¿Cuál de estos valores NO puede ser una probabilidad?", o: ["1,5", "0", "0,75", "1"], a: 0},
+                {q: "Si lanzas una moneda y un dado, ¿cuántos resultados posibles hay en total?", o: ["12", "8", "36", "6"], a: 0},
+                {q: "¿Cuál es el valor de sin(90°)?", o: ["1", "0", "0.5", "-1"], a: 0},
+                {q: "Si f(x) = x² - 2x + 1, f(1) equivale a:", o: ["0", "1", "2", "-1"], a: 0},
+                {q: "¿Cómo se llama la curva que representa una función cuadrática?", o: ["Parábola", "Hipérbola", "Circunferencia", "Recta"], a: 0},
+                {q: "El valor de log₄(2) es:", o: ["0,5", "2", "-1", "1/4"], a: 0},
+                {q: "Resuelve la ecuación exponencial: 2ˣ = 16", o: ["x = 4", "x = 8", "x = 3", "x = 5"], a: 0},
+                {q: "Resuelve: 3ˣ = 1/9", o: ["x = -2", "x = 2", "x = -3", "x = 3"], a: 0},
+                {q: "¿Cuál es la superficie total de un cubo de arista 2 cm?", o: ["24 cm²", "8 cm²", "16 cm²", "12 cm²"], a: 0},
+                {q: "La raíz cubic de -8 (∛-8) es:", o: ["-2", "2", "No existe en R", "-4"], a: 0},
+                {q: "La suma de los ángulos agudos de un triángulo rectángulo es siempre:", o: ["90°", "180°", "45°", "60°"], a: 0},
+                {q: "En trigonometría, cos(0°) es igual a:", o: ["1", "0", "Undefined", "0,5"], a: 0},
+                {q: "Si la ecuación cuadrática no corta al eje X, su discriminante es:", o: ["Menor que 0", "Igual a 0", "Mayor que 0", "Igual a 1"], a: 0},
+                {q: "Simplifica: √12", o: ["2√3", "3√2", "4√3", "6"], a: 0},
+                {q: "Suma de raíces: √3 + 2√3 =", o: ["3√3", "3√6", "2√3", "√9"], a: 0},
+                {q: "¿Qué representa la pendiente (m) en y = mx + c?", o: ["La inclinación de la recta", "El punto de corte Y", "El área bajo la curva", "El radio"], a: 0},
+                {q: "¿Cuál es el valor absoluto de -√25?", o: ["5", "-5", "25", "-25"], a: 0},
+                {q: "¿Cuál es la ordenada al origen de y = -2x + 5?", o: ["5", "-2", "2", "0"], a: 0},
+                {q: "Si log(x) + log(2) = log(10), entonces x es:", o: ["5", "8", "20", "12"], a: 0},
+                {q: "¿A cuánto equivale 2√5 en forma de una sola raíz?", o: ["√20", "√10", "√40", "√25"], a: 0},
+                {q: "El volumen de un cilindro de radio r y altura h es:", o: ["π · r² · h", "2π · r · h", "⅓ π · r² · h", "4/3 π · r³"], a: 0},
+                {q: "El valor de log₂ (1) es:", o: ["0", "2", "1", "-1"], a: 0},
+                {q: "Si f(x) = -x², la parábola abre hacia:", o: ["Abajo", "Arriba", "La derecha", "La izquierda"], a: 0},
+                {q: "La hipotenusa de un triángulo rectángulo isósceles con catetos de longitud 1 es:", o: ["√2", "2", "1", "√3"], a: 0},
+                {q: "Expresa 10⁻³ sin potencia:", o: ["0,001", "0,01", "-1000", "0,0001"], a: 0},
+                {q: "¿A qué es igual (a/b)⁻¹?", o: ["b / a", "-a / b", "a / b", "-b / a"], a: 0},
+                {q: "¿Cuál es el valor de log₁₀(0,1)?", o: ["-1", "1", "0", "-10"], a: 0},
+                {q: "Si f(x) = x² + 5, ¿cuál es su valor mínimo?", o: ["5", "0", "-5", "1"], a: 0},
+                {q: "Simplifica: (x²)³", o: ["x⁶", "x⁵", "x⁸", "x⁹"], a: 0},
+                {q: "¿Cuál es el período de la función seno básica sin(x)?", o: ["360° (o 2π)", "180° (o π)", "90°", "720°"], a: 0}
+            ],
+
+            3: [
+                // --- 3.º MEDIO (80 Preguntas) ---
+                {q: "Al lanzar un dado normal, ¿cuál es la probabilidad de obtener un número par?", o: ["1/2", "1/6", "1/3", "2/3"], a: 0},
+                {q: "¿Qué mide la desviación estándar?", o: ["Dispersión de datos", "El promedio", "La moda", "El valor máximo"], a: 0},
+                {q: "¿Cuántas combinaciones de 2 elementos se pueden hacer de un grupo de 4?", o: ["6", "8", "4", "12"], a: 0},
+                {q: "Al lanzar dos dados, ¿cuál es la probabilidad de sacar suma 12?", o: ["1/36", "1/6", "2/36", "1/12"], a: 0},
+                {q: "Si la varianza de un conjunto de datos es 16, su desviación estándar es:", o: ["4", "256", "8", "2"], a: 0},
+                {q: "¿Cuál de los siguientes valores representa el concepto de Varianza (σ²)?", o: ["El promedio de los cuadrados de las desviaciones", "La raíz cuadrada de la desviación estándar", "El dato central ordenado", "La diferencia entre el máximo y mínimo"], a: 0},
+                {q: "¿De cuántas formas distintas se pueden ordenar 3 libros en una repisa?", o: ["6", "3", "9", "12"], a: 0},
+                {q: "¿Cuál es el valor de 5! (5 factorial)?", o: ["120", "25", "60", "15"], a: 0},
+                {q: "El valor de 0! por definición es igual a:", o: ["1", "0", "Indefinido", "-1"], a: 0},
+                {q: "¿En qué se diferencia una permutación de una combinación?", o: ["En la permutación importa el orden", "En la combinación importa el orden", "Son exactamente lo mismo", "La permutación no usa factorial"], a: 0},
+                {q: "Si la probabilidad de que llueva es 0,35, ¿cuál es la probabilidad de que NO llueva?", o: ["0,65", "0,35", "0,75", "0,50"], a: 0},
+                {q: "¿Qué es el recorrido (o rango) de una variable estadística?", o: ["Diferencia entre el valor máximo y el mínimo", "El valor de la moda", "La suma de todos los datos", "El promedio"], a: 0},
+                {q: "En una distribución normal, el porcentaje aproximado de datos a 1 desviación estándar de la media es:", o: ["68%", "95%", "99%", "50%"], a: 0},
+                {q: "Si P(A) = 0,3, P(B) = 0,4 y son mutuamente excluyentes, P(A o B) es:", o: ["0,7", "0,12", "0,1", "0,5"], a: 0},
+                {q: "¿A cuánto equivale 4! / 3!?", o: ["4", "1", "12", "24"], a: 0},
+                {q: "¿Cuántos comités de 3 personas se pueden formar de un total de 5 personas?", o: ["10", "60", "15", "20"], a: 0},
+                {q: "La media muestral es un ejemplo de:", o: ["Un estadístico", "Un parámetro poblacional", "Una variable cualitativa", "Un sesgo"], a: 0},
+                {q: "En un experimento, el conjunto de todos los resultados posibles se llama:", o: ["Espacio muestral", "Evento", "Población", "Muestra"], a: 0},
+                {q: "Si lanzas dos monedas, ¿cuál es la probabilidad de obtener dos caras?", o: ["1/4", "1/2", "3/4", "1/8"], a: 0},
+                {q: "Si un conjunto de datos no cambia y a todos se les suma 5, ¿qué pasa con la desviación estándar?", o: ["Se mantiene igual", "Aumenta en 5", "Se multiplica por 5", "Se reduce a la mitad"], a: 0},
+                {q: "Si a todos los datos de una muestra se les multiplica por 3, la desviación estándar:", o: ["Se multiplica por 3", "Se mantiene igual", "Aumenta en 3", "Se eleva al cuadrado"], a: 0},
+                {q: "¿Cuál es el valor del percentil 50 de una distribución?", o: ["La Mediana", "El Promedio", "La Moda", "El Primer Cuartil"], a: 0},
+                {q: "¿A qué equivale el Tercer Cuartil (Q3)?", o: ["Percentil 75", "Percentil 25", "Percentil 50", "Percentil 30"], a: 0},
+                {q: "¿Cuántos cuartiles dividen a un conjunto de datos en 4 partes iguales?", o: ["3 cuartiles", "4 cuartiles", "5 cuartiles", "2 cuartiles"], a: 0},
+                {q: "La probabilidad condicional P(A|B) se calcula como:", o: ["P(A ∩ B) / P(B)", "P(A) · P(B)", "P(A ∪ B) / P(A)", "P(B) / P(A)"], a: 0},
+                {q: "¿De cuántas formas se pueden sentar 4 personas en una fila de 4 sillas?", o: ["24", "16", "12", "4"], a: 0},
+                {q: "Si un grupo tiene 10 personas y elegimos un presidente y un secretario, ¿cuántas parejas posibles hay?", o: ["90", "45", "100", "20"], a: 0},
+                {q: "¿Cuál es la probabilidad de sacar un As de una baraja española de 40 cartas?", o: ["4/40 (1/10)", "1/40", "4/52", "1/4"], a: 0},
+                {q: "Si se lanza un dado, ¿cuál es la probabilidad de sacar un número mayor que 4?", o: ["2/6 (1/3)", "4/6", "1/6", "1/2"], a: 0},
+                {q: "Un diagrama de cajón (Boxplot) muestra visualmente:", o: ["Los cuartiles y valores extremos", "Solo la media", "La frecuencia absoluta", "Las modas múltiples"], a: 0},
+                {q: "El intervalo intercuartil (IQR) se calcula como:", o: ["Q3 - Q1", "Q3 + Q1", "Q2 - Q1", "Máximo - Mínimo"], a: 0},
+                {q: "Si la varianza de una muestra es 0, significa que:", o: ["Todos los datos son iguales", "El promedio es cero", "No hay datos", "Existe mucho error"], a: 0},
+                {q: "¿Cuál es la probabilidad de un evento imposible?", o: ["0", "1", "0,5", "-1"], a: 0},
+                {q: "¿Cuál es la probabilidad de un evento seguro?", o: ["1", "100", "0", "0,5"], a: 0},
+                {q: "Si la media de 5 datos es 10, ¿cuál es la suma total de esos 5 datos?", o: ["50", "15", "2", "25"], a: 0},
+                {q: "Si lanzamos 3 monedas, ¿cuántos elementos tiene el espacio muestral?", o: ["8", "6", "9", "16"], a: 0},
+                {q: "¿Cuál es la fórmula de combinaciones C(n, k)?", o: ["n! / (k!(n-k)!)", "n! / (n-k)!", "n! · k!", "k! / n!"], a: 0},
+                {q: "¿Cuál es la fórmula de variaciones V(n, k)?", o: ["n! / (n-k)!", "n! / k!", "n! · (n-k)!", "(n-k)! / n!"], a: 0},
+                {q: "Calcula 6! / 4!:", o: ["30", "1.5", "2", "24"], a: 0},
+                {q: "Si elegimos una vocal al azar del abecedario español (27 letras), ¿cuál es la probabilidad?", o: ["5/27", "5/22", "1/5", "5/26"], a: 0},
+                {q: "Si dos eventos A y B son independientes, P(A y B) es igual a:", o: ["P(A) · P(B)", "P(A) + P(B)", "P(A) / P(B)", "P(A) - P(B)"], a: 0},
+                {q: "La suma de las probabilidades de todos los eventos elementales de un espacio muestral es:", o: ["1", "100", "0", "Depende de los datos"], a: 0},
+                {q: "Se realiza una encuesta a 100 personas sobre su preferencia. La muestra es:", o: ["Las 100 personas encuestadas", "Toda la población del país", "La preferencia elegida", "El porcentaje de error"], a: 0},
+                {q: "¿Cuál es el coeficiente de variación?", o: ["Desviación estándar / Media", "Media / Desviación estándar", "Varianza / Media", "Rango / 2"], a: 0},
+                {q: "La variable 'Número de hijos por familia' es de tipo:", o: ["Cuantitativa discreta", "Cuantitativa continua", "Cualitativa nominal", "Cualitativa ordinal"], a: 0},
+                {q: "La variable 'Estatura de una persona en metros' es de tipo:", o: ["Cuantitativa continua", "Cuantitativa discreta", "Cualitativa nominal", "Cualitativa ordinal"], a: 0},
+                {q: "La variable 'Nivel de satisfacción (Alto, Medio, Bajo)' es de tipo:", o: ["Cualitativa ordinal", "Cualitativa nominal", "Cuantitativa discreta", "Cuantitativa continua"], a: 0},
+                {q: "La variable 'Color de ojos' es de tipo:", o: ["Cualitativa nominal", "Cualitativa ordinal", "Cuantitativa discreta", "Cuantitativa continua"], a: 0},
+                {q: "¿Qué percentil corresponde a la mediana?", o: ["P50", "P25", "P75", "P10"], a: 0},
+                {q: "¿A cuántos deciles se divide una muestra ordenada?", o: ["9 deciles (en 10 partes)", "10 deciles", "100 deciles", "4 deciles"], a: 0},
+                {q: "Si el Percentil 80 de puntajes es 650, significa que:", o: ["El 80% obtuvo 650 o menos", "El 80% obtuvo más de 650", "El 20% obtuvo 650 o menos", "80 personas obtuvieron 650"], a: 0},
+                {q: "¿Cuántas palabras de 4 letras distintas se pueden formar con la palabra 'AMOR'?", o: ["24", "16", "12", "256"], a: 0},
+                {q: "En una bolsa hay 5 bolitas verdes y 5 rojas. Se saca una verde y NO se devuelve. ¿Probabilidad de sacar otra verde?", o: ["4/9", "5/10", "4/10", "5/9"], a: 0},
+                {q: "Del problema anterior, extraer sin devolución se denomina muestreo:", o: ["Sin reemplazo", "Con reemplazo", "Aleatorio continuo", "Sesgado"], a: 0},
+                {q: "En un experimento binomial con n=10 y p=0,5, la media (esperanza) es:", o: ["5", "10", "2,5", "1"], a: 0},
+                {q: "¿Cuál es el valor de C(5, 5)?", o: ["1", "5", "25", "0"], a: 0},
+                {q: "¿Cuál es el valor de C(7, 1)?", o: ["7", "1", "49", "0"], a: 0},
+                {q: "¿Cuál es la probabilidad de obtener suma 7 al lanzar dos dados?", o: ["6/36 (1/6)", "7/36", "5/36", "1/12"], a: 0},
+                {q: "Si lanzas una moneda 4 veces, ¿cuántos resultados posibles hay?", o: ["16", "8", "4", "32"], a: 0},
+                {q: "La moda en una tabla de datos agrupados es:", o: ["El intervalo con mayor frecuencia absoluta", "El valor del centro", "El promedio del intervalo", "El valor máximo"], a: 0},
+                {q: "Si un evento A tiene P(A) = 1, se dice que A es:", o: ["Cierto / Seguro", "Imposible", "Poco probable", "Mutuamente excluyente"], a: 0},
+                {q: "Al lanzar un dado, los eventos 'sacar par' y 'sacar impar' son:", o: ["Mutuamente excluyentes y complementarios", "Independientes", "Iguales", "Incompatibles únicamente"], a: 0},
+                {q: "¿Cuál es la desviación estándar de la serie: 5, 5, 5, 5, 5?", o: ["0", "5", "1", "2.5"], a: 0},
+                {q: "El promedio de los datos: 2, 4, 6, 8 es:", o: ["5", "4", "6", "4.5"], a: 0},
+                {q: "Si P(A) = 0,6, ¿cuánto vale P(Aᶜ) (evento complementario)?", o: ["0,4", "0,6", "-0,6", "1,6"], a: 0},
+                {q: "¿A cuántos quintiles se divide una muestra ordenada de datos?", o: ["4 quintiles (en 5 partes)", "5 quintiles", "20 quintiles", "10 quintiles"], a: 0},
+                {q: "Si P(A ∩ B) = 0, los eventos A y B son:", o: ["Mutuamente excluyentes", "Independientes", "Iguales", "Complementarios"], a: 0},
+                {q: "¿Cuál es la marca de clase del intervalo [10, 20[?", o: ["15", "10", "20", "5"], a: 0},
+                {q: "La amplitud del intervalo [15, 25[ es:", o: ["10", "20", "15", "40"], a: 0},
+                {q: "La suma de las frecuencias relativas en una tabla estadística es siempre:", o: ["1 (o 100%)", "El total de datos N", "0", "10"], a: 0},
+                {q: "En una bolsa con 10 fichas numeradas del 1 al 10, ¿probabilidad de sacar un primo?", o: ["4/10 (2/5)", "5/10", "3/10", "6/10"], a: 0},
+                {q: "¿De cuántas maneras se pueden ordenar 5 personas en una mesa redonda? (Permutación circular (n-1)!)", o: ["24", "120", "60", "20"], a: 0},
+                {q: "Calcula 3! + 2!:", o: ["8", "12", "5", "6"], a: 0},
+                {q: "Calcula 3! · 2!:", o: ["12", "6", "36", "24"], a: 0},
+                {q: "La mediana de los datos 3, 1, 7, 2, 5 es:", o: ["3", "7", "2.5", "5"], a: 0},
+                {q: "La suma de las desviaciones respecto a la media de un conjunto de datos es siempre:", o: ["0", "1", "Igual a la varianza", "La desviación estándar"], a: 0},
+                {q: "¿Qué porcentaje de datos supera al Percentil 30?", o: ["70%", "30%", "50%", "40%"], a: 0},
+                {q: "Si n=100 datos, el percentil 25 corresponde a la posición del dato:", o: ["25", "50", "75", "20"], a: 0},
+                {q: "Si la varianza es 25, ¿cuál es la desviación estándar?", o: ["5", "12.5", "625", "50"], a: 0},
+                {q: "Al lanzar dos dados, ¿cuál es el total de combinaciones posibles en el espacio muestral?", o: ["36", "12", "24", "18"], a: 0}
+            ],
+
+            4: [
+                // --- 4.º MEDIO (80 Preguntas) ---
+                {q: "Si un capital crece C(t) = 100 · 2ᵗ, ¿cuál es el monto al tiempo t = 3?", o: ["800", "600", "300", "1600"], a: 0},
+                {q: "¿Cuál es la función inversa de f(x) = eˣ?", o: ["g(x) = ln(x)", "g(x) = x²", "g(x) = 1/eˣ", "g(x) = log₁₀(x)"], a: 0},
+                {q: "Si P(A) = 0,4 y P(B) = 0,5 (independientes), ¿cuánto es P(A y B)?", o: ["0,20", "0,90", "0,10", "0,50"], a: 0},
+                {q: "¿Qué representa la integral en términos geométricos?", o: ["El área bajo la curva", "La pendiente de la curva", "El centroide únicamente", "El perímetro"], a: 0},
+                {q: "¿Cuál es la derivada de f(x) = x³?", o: ["f'(x) = 3x²", "f'(x) = x²", "f'(x) = 3x", "f'(x) = 3x³"], a: 0},
+                {q: "¿Cuál es la derivada de una constante c?", o: ["0", "1", "c", "x"], a: 0},
+                {q: "¿Cuál es la gráfica de la función exponencial f(x) = aˣ con a > 1?", o: ["Creciente en todo su dominio", "Decreciente en todo su dominio", "Una parábola", "Una recta horizontal"], a: 0},
+                {q: "El dominio de la función exponencial f(x) = 2ˣ es:", o: ["Todos los números reales", "Solo los reales positivos", "Solo los enteros", "x > 0"], a: 0},
+                {q: "El recorrido (rango) de f(x) = 2ˣ es:", o: ["Reales positivos (0, +∞)", "Todos los números reales", "Reales negativos", "[1, +∞)"], a: 0},
+                {q: "Si f(x) = 2x + 1, ¿cuál es su función inversa f⁻¹(x)?", o: ["(x - 1) / 2", "(x + 1) / 2", "2x - 1", "1 / (2x + 1)"], a: 0},
+                {q: "Resuelve para x: log₂(x + 1) = 3", o: ["7", "8", "9", "6"], a: 0},
+                {q: "El interés compuesto se calcula mediante la fórmula:", o: ["M = C(1 + i)ⁿ", "M = C(1 + i · n)", "M = C · i · n", "M = C / (1 + i)ⁿ"], a: 0},
+                {q: "Si depositas $1.000 a un 10% de interés compuesto anual, ¿cuánto tienes en 2 años?", o: ["$1.210", "$1.200", "$1.100", "$1.300"], a: 0},
+                {q: "¿Cuál es la derivada de f(x) = 5x?", o: ["5", "5x", "0", "x"], a: 0},
+                {q: "¿Qué representa la primera derivada f'(x) en un punto?", o: ["La pendiente de la recta tangente", "El área acumulada", "El valor máximo absoluto", "La concavidad"], a: 0},
+                {q: "Si f'(x) > 0 en un intervalo, entonces f(x) en ese intervalo es:", o: ["Creciente", "Decreciente", "Constante", "Cero"], a: 0},
+                {q: "Si f'(x) = 0 y f''(x) < 0 en un punto x₀, en x₀ hay:", o: ["Un máximo local", "Un mínimo local", "Un punto de inflexión", "Un cero"], a: 0},
+                {q: "Si f'(x) = 0 y f''(x) > 0 en un punto x₀, en x₀ hay:", o: ["Un mínimo local", "Un máximo local", "Un punto de inflexión", "Una asíntota"], a: 0},
+                {q: "¿Cuál es la integral indefinida ∫ x dx?", o: ["x² / 2 + C", "x² + C", "2x + C", "1 + C"], a: 0},
+                {q: "¿Cuál es la derivada de f(x) = eˣ?", o: ["eˣ", "x · eˣ⁻¹", "ln(x)", "1 / eˣ"], a: 0},
+                {q: "La función inversa de f(x) = x³ es:", o: ["g(x) = ∛x", "g(x) = x⁻³", "g(x) = 3x", "g(x) = x/3"], a: 0},
+                {q: "¿Qué condición debe cumplir una función para poseer inversa f⁻¹?", o: ["Debe ser inyectiva (uno a uno)", "Debe ser cuadrática", "Debe ser constante", "Debe pasar por el origen"], a: 0},
+                {q: "En el modelo poblacional P(t) = P₀ · eᵏᵗ, si k > 0 el modelo representa:", o: ["Crecimiento exponencial", "Decaimiento exponencial", "Crecimiento lineal", "Estancamiento"], a: 0},
+                {q: "En la función f(x) = log(x), la asíntota vertical es la recta:", o: ["x = 0", "y = 0", "x = 1", "y = 1"], a: 0},
+                {q: "En la función f(x) = 2ˣ, la asíntota horizontal es la recta:", o: ["y = 0", "x = 0", "y = 1", "x = 1"], a: 0},
+                {q: "Si la derivada de una función es constante f'(x) = 4, la función original f(x) es:", o: ["Lineal", "Cuadrática", "Exponencial", "Cúbica"], a: 0},
+                {q: "¿A qué es igual lim (x → 2) de (x² - 4) / (x - 2)?", o: ["4", "0", "Indefinido", "2"], a: 0},
+                {q: "¿Cuál es la integral indefinida ∫ 5 dx?", o: ["5x + C", "5 + C", "0", "x⁵ + C"], a: 0},
+                {q: "¿Cuál es la derivada de f(x) = ln(x)?", o: ["1 / x", "eˣ", "x", "1 / ln(x)"], a: 0},
+                {q: "Si una población de bacterias se duplica cada hora y hay 100 iniciales, ¿cuántas hay en t = 4 hrs?", o: ["1600", "800", "400", "3200"], a: 0},
+                {q: "En el modelo de desintegración radiactiva N(t) = N₀ · e⁻ᵏᵗ, cuando k > 0 la sustancia:", o: ["Disminuye con el tiempo", "Aumenta con el tiempo", "Permanece constante", "Se vuelve infinita"], a: 0},
+                {q: "Resuelve: 5ˣ⁺¹ = 125", o: ["x = 2", "x = 3", "x = 1", "x = 4"], a: 0},
+                {q: "Resuelve: log(x) + log(5) = 2", o: ["x = 20", "x = 10", "x = 50", "x = 100"], a: 0},
+                {q: "¿Cuál es el valor del límite lim (x → ∞) de (1 / x)?", o: ["0", "∞", "1", "Indefinido"], a: 0},
+                {q: "¿Cuál es el valor del límite lim (x → 0) de (sin(x) / x)?", o: ["1", "0", "∞", "Undefined"], a: 0},
+                {q: "La función f(x) = |x| NO es derivable en el punto:", o: ["x = 0", "x = 1", "x = -1", "Es derivable en todos los puntos"], a: 0},
+                {q: "Si f(x) = x⁴ - 2x², ¿cuáles son sus puntos críticos (f'(x) = 0)?", o: ["x = 0, x = 1, x = -1", "x = 0 solamente", "x = 2, x = -2", "x = 1, x = -1"], a: 0},
+                {q: "¿A qué es igual ∫ x² dx evaluada entre 0 y 3 (integral definida)?", o: ["9", "27", "18", "3"], a: 0},
+                {q: "En una distribución normal estándar Z, la media y la desviación estándar son:", o: ["Media = 0, Desviación = 1", "Media = 1, Desviación = 0", "Media = 100, Desviación = 15", "Media = 0, Desviación = 0"], a: 0},
+                {q: "Si Z es una variable Normal Standard, ¿cuál es P(Z ≤ 0)?", o: ["0,5", "1", "0", "0,25"], a: 0},
+                {q: "¿Cuál de las siguientes funciones crece más rápido cuando x → ∞?", o: ["f(x) = 2ˣ", "f(x) = x³", "f(x) = 100x", "f(x) = ln(x)"], a: 0},
+                {q: "Si f(g(x)) representa la composición de funciones, y f(x) = x² y g(x) = x + 1, entonces f(g(x)) es:", o: ["(x + 1)²", "x² + 1", "x²(x + 1)", "x³ + 1"], a: 0},
+                {q: "Usando las funciones anteriores, ¿cuál es g(f(x))?", o: ["x² + 1", "(x + 1)²", "x³ + 1", "2x + 1"], a: 0},
+                {q: "¿A qué es igual e⁰?", o: ["1", "0", "e", "Indefinido"], a: 0},
+                {q: "Si log_b(a) = c, su forma exponencial equivalente es:", o: ["bᶜ = a", "aᶜ = b", "cᵇ = a", "bᵃ = c"], a: 0},
+                {q: "¿Cuál es el periodo de f(x) = cos(2x)?", o: ["π (o 180°)", "2π (o 360°)", "π/2", "4π"], a: 0},
+                {q: "¿Cuál es la derivada de f(x) = cos(x)?", o: ["-sin(x)", "sin(x)", "tan(x)", "-cos(x)"], a: 0},
+                {q: "¿Cuál es la derivada de f(x) = sin(x)?", o: ["cos(x)", "-cos(x)", "-sin(x)", "1/cos(x)"], a: 0},
+                {q: "Si f(x) = x³ - 3x, la segunda derivada f''(x) es:", o: ["6x", "3x² - 3", "6", "3x"], a: 0},
+                {q: "Un punto donde la segunda derivada cambia de signo f''(x) = 0 se conoce como:", o: ["Punto de inflexión", "Máximo absoluto", "Mínimo relativo", "Asíntota"], a: 0},
+                {q: "¿A qué equivale ln(e⁵)?", o: ["5", "e", "1", "0"], a: 0},
+                {q: "Si depositas $500.000 a interés simple del 5% anual por 3 años, los intereses ganados son:", o: ["$75.000", "$50.000", "$150.000", "$25.000"], a: 0},
+                {q: "La regla de la cadena se utiliza para derivar:", o: ["Composición de funciones", "Producto de funciones", "Cociente de funciones", "Suma de funciones"], a: 0},
+                {q: "¿Cuál es la derivada de (x² + 1)³ usando la regla de la cadena?", o: ["3(x² + 1)² · 2x", "3(x² + 1)²", "6x", "3(2x)²"], a: 0},
+                {q: "¿A qué es igual ln(1)?", o: ["0", "1", "e", "Indefinido"], a: 0},
+                {q: "Si lim (x → a) f(x) = f(a), la función es:", o: ["Continua en x = a", "Derivable en x = a", "Inversa en x = a", "Discontinua"], a: 0},
+                {q: "¿Cuál es la derivada de f(x) = u(x) · v(x) (regla del producto)?", o: ["u'v + uv'", "u'v'", "u' + v'", "u'v - uv'"], a: 0},
+                {q: "En el Teorema Central del Límite, cuando el tamaño muestral n crece, la distribución de medias tiende a:", o: ["Una distribución normal", "Una distribución uniforme", "Una distribución binomial", "Permanecer idéntica"], a: 0},
+                {q: "¿Cuál es la integral ∫ 1/x dx (para x > 0)?", o: ["ln(x) + C", "-1/x² + C", "eˣ + C", "x + C"], a: 0},
+                {q: "Si f(x) = 4ˣ, ¿cuál es f(1/2)?", o: ["2", "4", "1/2", "8"], a: 0},
+                {q: "El área encerrada por la curva f(x) = x desde x=0 hasta x=2 es:", o: ["2", "4", "1", "3"], a: 0},
+                {q: "Si $100 ganan 10% de interés compuesto semestral durante 1 año (2 periodos), el monto final es:", o: ["$121", "$120", "$110", "$122"], a: 0},
+                {q: "¿Cuál es el valor de lim (x → ∞) de (3x² + 2) / (x² - 5)?", o: ["3", "0", "∞", "-2/5"], a: 0},
+                {q: "Si f(x) = 3ˣ, la función es estrictamente:", o: ["Creciente", "Decreciente", "Constante", "Simétrica respecto al eje Y"], a: 0},
+                {q: "La función f(x) = (1/2)ˣ es una función de:", o: ["Decaimiento exponencial", "Crecimiento exponencial", "Pendiente negativa lineal", "Grado 2"], a: 0},
+                {q: "Si f(x) = x² - 4x + 5, su punto mínimo se encuentra en x igual a:", o: ["2", "4", "0", "-2"], a: 0},
+                {q: "Si derivamos la velocidad v(t) respecto al tiempo t, obtenemos:", o: ["La aceleración a(t)", "La posición s(t)", "La fuerza", "El trabajo"], a: 0},
+                {q: "Si integramos la velocidad v(t) respecto al tiempo t, obtenemos:", o: ["La posición / desplazamiento s(t)", "La aceleración", "El tiempo total", "La velocidad media"], a: 0},
+                {q: "La amplitud de f(x) = 3 sin(x) es:", o: ["3", "1", "6", "2π"], a: 0},
+                {q: "El dominio de f(x) = ln(x) es:", o: ["(0, +∞)", "[0, +∞)", "Todos los reales", "(-∞, 0)"], a: 0},
+                {q: "¿Cuál es la derivada de f(x) = 2x³ - 5x² + 3?", o: ["6x² - 10x", "6x² - 10", "3x² - 5x", "6x - 10"], a: 0},
+                {q: "Resuelve la ecuación logarítmica: log₃(x) = 4", o: ["81", "12", "64", "27"], a: 0},
+                {q: "Si f(x) = 1/x, su derivada f'(x) es:", o: ["-1 / x²", "1 / x²", "ln(x)", "-1 / x"], a: 0},
+                {q: "En una distribución N(100, 15), ¿cuál es la media μ?", o: ["100", "15", "85", "115"], a: 0},
+                {q: "En esa misma distribución N(100, 15), ¿cuál es la desviación estándar σ?", o: ["15", "100", "225", "30"], a: 0},
+                {q: "¿Cuál es el valor de ∫ eˣ dx?", o: ["eˣ + C", "eˣ⁺¹ / (x+1) + C", "ln(x) + C", "x · eˣ + C"], a: 0},
+                {q: "Si se lanzan 100 monedas, la media de caras esperadas según la distribución binomial es:", o: ["50", "25", "100", "10"], a: 0},
+                {q: "Si f(x) = x + f⁻¹(x) y f(x) = 3x, entonces f⁻¹(x) es:", o: ["x / 3", "-3x", "1 / 3x", "x - 3"], a: 0},
+                {q: "¿Cuál es el resultado de lim (x → 3) de (x - 3)?", o: ["0", "3", "1", "Indefinido"], a: 0},
+                {q: "Si la probabilidad de éxito en un ensayo de Bernoulli es p = 0,2, la probabilidad de fracaso q es:", o: ["0,8", "0,2", "0,5", "1,2"], a: 0}
+            ]
+        };
+
+        let score = 0, timer, timeLeft = 60, currentLevel = 1, currentTab = 1;
+        let rankings = JSON.parse(localStorage.getItem('math_rankings')) || { 1: [], 2: [], 3: [], 4: [] };
+        let isAnswering = false;
+
+        function start(level) {
+            currentLevel = level; score = 0; timeLeft = 60; isAnswering = false;
+            document.getElementById('setup').style.display = 'none';
+            document.getElementById('game').style.display = 'block';
+            document.getElementById('end').style.display = 'none';
+            document.getElementById('space-travel-screen').style.display = 'none';
+            document.getElementById('game-selection').style.display = 'none';
+            document.getElementById('pts').innerText = score;
+            document.getElementById('time').innerText = timeLeft;
+            document.getElementById('feedback-msg').innerText = '';
+            document.getElementById('feedback-msg').className = 'feedback-message';
+            nextQ();
+            timer = setInterval(tick, 1000);
+        }
+
+        function tick() {
+            timeLeft--;
+            document.getElementById('time').innerText = timeLeft;
+            if(timeLeft <= 0) {
+                clearInterval(timer);
+                document.getElementById('game').style.display = 'none';
+                document.getElementById('end').style.display = 'block';
+                document.getElementById('final-pts').innerText = score;
+                document.getElementById('player-name').focus();
+            }
+        }
+
+        function nextQ() {
+            isAnswering = false;
+            const feedbackEl = document.getElementById('feedback-msg');
+            feedbackEl.innerText = ''; feedbackEl.className = 'feedback-message';
+
+            const list = bank[currentLevel];
+            const q = list[Math.floor(Math.random() * list.length)];
+            document.getElementById('q-text').innerText = q.q;
+            const container = document.getElementById('opts');
+            container.innerHTML = '';
+            
+            let indices = [0, 1, 2, 3].slice(0, q.o.length).sort(() => Math.random() - 0.5);
+
+            indices.forEach((i) => {
+                const b = document.createElement('button');
+                b.className = 'btn btn-opt';
+                b.innerText = q.o[i];
+                b.onclick = () => {
+                    if (isAnswering) return;
+                    isAnswering = true;
+
+                    const allButtons = container.querySelectorAll('.btn-opt');
+                    allButtons.forEach(btn => btn.style.pointerEvents = 'none');
+
+                    if(i === q.a) { 
+                        b.classList.add('correct-ans');
+                        feedbackEl.innerText = '✅ ¡CORRECTO! (+Puntos, +5s)';
+                        feedbackEl.className = 'feedback-message feedback-correct';
+                        score += 100 + timeLeft * 5; 
+                        timeLeft += 5; 
+                    } else { 
+                        b.classList.add('wrong-ans');
+                        feedbackEl.innerText = '❌ ¡INCORRECTO! (-7s)';
+                        feedbackEl.className = 'feedback-message feedback-wrong';
+
+                        allButtons.forEach((btn, index) => {
+                            if (q.o[indices[index]] === q.o[q.a]) {
+                                btn.classList.add('correct-ans');
+                            }
+                        });
+
+                        timeLeft = Math.max(0, timeLeft - 7); 
+                    }
+
+                    document.getElementById('pts').innerText = score;
+                    document.getElementById('time').innerText = timeLeft;
+
+                    setTimeout(() => {
+                        if (timeLeft > 0) { nextQ(); }
+                    }, 800);
+                };
+                container.appendChild(b);
+            });
+        }
+
+        function saveScore() {
+            const nameInput = document.getElementById('player-name').value.trim();
+            const classInput = document.getElementById('player-class').value.trim();
+            
+            const name = nameInput !== "" ? nameInput : "Anónimo";
+            const userClass = classInput !== "" ? classInput : "-";
+            
+            rankings[currentLevel].push({ name: name, userClass: userClass, score: score });
+            rankings[currentLevel].sort((a, b) => b.score - a.score);
+            rankings[currentLevel] = rankings[currentLevel].slice(0, 10);
+
+            localStorage.setItem('math_rankings', JSON.stringify(rankings));
+            switchTab(currentLevel);
+
+            document.getElementById('end').style.display = 'none';
+            document.getElementById('space-travel-screen').style.display = 'block';
+            startSpaceTravelAnimation();
+        }
+
+        /* ANIMACIÓN DEL VIAJE ESPACIAL EN COHETE */
+        function startSpaceTravelAnimation() {
+            const canvas = document.getElementById('spaceTravelCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            document.getElementById('travel-result').innerText = '';
+            document.getElementById('next-to-minigames-btn').style.display = 'none';
+
+            // Planetas con metas de puntaje
+            const planets = [
+                { name: "Luna", minPts: 0, x: 140, y: 220, r: 18, color: "#cbd5e1", icon: "🌕" },
+                { name: "Marte", minPts: 300, x: 280, y: 160, r: 22, color: "#f87171", icon: "🔴" },
+                { name: "Júpiter", minPts: 800, x: 420, y: 100, r: 28, color: "#fbbf24", icon: "🪐" },
+                { name: "Andrómeda", minPts: 1500, x: 540, y: 45, r: 24, color: "#e024ff", icon: "🌌" }
+            ];
+
+            const startX = 35;
+            const startY = 270;
+
+            // Calcular destino según puntaje
+            let targetIndex = 0;
+            if (score >= 1500) targetIndex = 3;
+            else if (score >= 800) targetIndex = 2;
+            else if (score >= 300) targetIndex = 1;
+
+            const targetPlanet = planets[targetIndex];
+            const endX = targetPlanet.x;
+            const endY = targetPlanet.y;
+
+            let progress = 0;
+            const totalFrames = 120; // 2 segundos de viaje aproximadamente
+
+            function drawTravelScene() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+                // Estrellas de fondo
+                ctx.fillStyle = "rgba(255, 255, 255, 0.6)";
+                for (let i = 0; i < 40; i++) {
+                    let sx = (i * 37) % canvas.width;
+                    let sy = (i * 23) % canvas.height;
+                    ctx.fillRect(sx, sy, (i % 2 === 0 ? 2 : 1), (i % 2 === 0 ? 2 : 1));
+                }
+
+                // Línea de órbita / trayectoria
+                ctx.beginPath();
+                ctx.moveTo(startX, startY);
+                planets.forEach(p => ctx.lineTo(p.x, p.y));
+                ctx.strokeStyle = "rgba(0, 240, 255, 0.25)";
+                ctx.lineWidth = 2;
+                ctx.setLineDash([5, 5]);
+                ctx.stroke();
+                ctx.setLineDash([]);
+
+                // Dibujar Planetas
+                planets.forEach(p => {
+                    ctx.save();
+                    ctx.shadowColor = p.color;
+                    ctx.shadowBlur = 12;
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fillStyle = p.color;
+                    ctx.fill();
+                    ctx.restore();
+
+                    ctx.font = "bold 11px sans-serif";
+                    ctx.fillStyle = "#ffffff";
+                    ctx.textAlign = "center";
+                    ctx.fillText(`${p.name}`, p.x, p.y + p.r + 14);
+                    ctx.font = "9px sans-serif";
+                    ctx.fillStyle = "#94a3b8";
+                    ctx.fillText(`(${p.minPts} pts)`, p.x, p.y + p.r + 25);
+                });
+
+                // Posición actual del Cohete
+                let currentX = startX + (endX - startX) * progress;
+                let currentY = startY + (endY - startY) * progress;
+
+                // Estela del cohete
+                if (progress > 0) {
+                    ctx.beginPath();
+                    ctx.moveTo(startX, startY);
+                    ctx.lineTo(currentX, currentY);
+                    ctx.strokeStyle = "rgba(239, 68, 68, 0.7)";
+                    ctx.lineWidth = 3;
+                    ctx.stroke();
+                }
+
+                // Dibujar Cohete
+                ctx.save();
+                ctx.font = "26px sans-serif";
+                ctx.textAlign = "center";
+                ctx.textBaseline = "middle";
+                ctx.fillText("🚀", currentX, currentY);
+                ctx.restore();
+            }
+
+            function animateRocket() {
+                progress += 1 / totalFrames;
+                if (progress > 1) progress = 1;
+
+                drawTravelScene();
+
+                if (progress < 1) {
+                    requestAnimationFrame(animateRocket);
+                } else {
+                    const resDiv = document.getElementById('travel-result');
+                    resDiv.innerText = `✨ ¡Llegaste a: ${targetPlanet.name}! (${score} pts alcanzados)`;
+                    document.getElementById('next-to-minigames-btn').style.display = 'inline-block';
+                }
+            }
+
+            animateRocket();
+        }
+
+        function goToMinigames() {
+            document.getElementById('space-travel-screen').style.display = 'none';
+            document.getElementById('game-selection').style.display = 'block';
+        }
+
+        function switchTab(level) {
+            currentTab = level;
+            document.querySelectorAll('.tab-btn').forEach((btn, idx) => {
+                btn.classList.toggle('active', idx + 1 === level);
+            });
+
+            const tbody = document.getElementById('ranking-body');
+            tbody.innerHTML = '';
+
+            const list = rankings[level] || [];
+
+            if(list.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="4" style="text-align:center; color:#64748b; padding: 20px;">Sin puntajes registrados</td></tr>';
+                return;
+            }
+
+            list.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td>${index + 1}°</td>
+                    <td>${item.name}</td>
+                    <td style="color: #cbd5e1;">${item.userClass}</td>
+                    <td><strong>${item.score}</strong></td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function clearRankings() {
+            if(confirm("¿Seguro que deseas reiniciar los marcadores del stand?")) {
+                rankings = { 1: [], 2: [], 3: [], 4: [] };
+                localStorage.removeItem('math_rankings');
+                switchTab(currentTab);
+            }
+        }
+
+        /* MINIJUEGO 1: PROYECTIL */
+        const canvas = document.getElementById('cannonCanvas');
+        const ctx = canvas.getContext('2d');
+        const cannonPos = { x: 25, y: 260 };
+        let cannonAngle = 35, angleSpeed = 1.8, isFiring = false;
+        let ball = { x: cannonPos.x, y: cannonPos.y, vx: 0, vy: 0 }, animId = null, explosionEffect = null;
+
+        const targets = [
+            { x: 390, y: 65, radius: 22, type: "dulce", title: "1 Dulce", icon: "🍬", color: "#00b4d8", stroke: "#90e0ef" },
+            { x: 470, y: 115, radius: 22, type: "nada", title: "Perdiste", icon: "❌", color: "#e63946", stroke: "#ffb703" },
+            { x: 340, y: 155, radius: 24, type: "decima", title: "+2 Décimas", icon: "📝", color: "#ffb703", stroke: "#fff" },
+            { x: 480, y: 205, radius: 22, type: "nada", title: "Perdiste", icon: "❌", color: "#e63946", stroke: "#ffb703" },
+            { x: 280, y: 110, radius: 22, type: "dulce", title: "1 Dulce", icon: "🍬", color: "#00b4d8", stroke: "#90e0ef" },
+            { x: 390, y: 235, radius: 22, type: "nada", title: "Perdiste", icon: "❌", color: "#e63946", stroke: "#ffb703" }
+        ];
+
+        function openCannonModal() {
+            document.getElementById('projectile-modal').style.display = 'flex';
+            document.getElementById('prize-result').innerText = '';
+            document.getElementById('fire-btn').style.display = 'inline-block';
+            document.getElementById('close-modal-btn').style.display = 'none';
+            isFiring = false; cannonAngle = 20; explosionEffect = null;
+            ball = { x: cannonPos.x, y: cannonPos.y, vx: 0, vy: 0 };
+            drawScene(); animateAngle();
+        }
+
+        function animateAngle() {
+            if (isFiring) return;
+            cannonAngle += angleSpeed;
+            if (cannonAngle > 78 || cannonAngle < 12) angleSpeed *= -1;
+            drawScene();
+            animId = requestAnimationFrame(animateAngle);
+        }
+
+        function drawScene() {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            ctx.strokeStyle = "rgba(0, 240, 255, 0.1)";
+            ctx.lineWidth = 1;
+            for(let x=0; x<canvas.width; x+=30) { ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,canvas.height); ctx.stroke(); }
+            for(let y=0; y<canvas.height; y+=30) { ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(canvas.width,y); ctx.stroke(); }
+
+            targets.forEach(t => {
+                ctx.save(); ctx.shadowColor = t.color; ctx.shadowBlur = 10;
+                ctx.beginPath(); ctx.arc(t.x, t.y, t.radius, 0, Math.PI * 2);
+                ctx.fillStyle = "#0f172a"; ctx.fill();
+                ctx.lineWidth = 2.5; ctx.strokeStyle = t.stroke; ctx.stroke();
+                ctx.beginPath(); ctx.arc(t.x, t.y, t.radius - 3, 0, Math.PI * 2);
+                ctx.fillStyle = t.color; ctx.fill(); ctx.restore();
+
+                ctx.font = "14px sans-serif"; ctx.textAlign = "center"; ctx.textBaseline = "middle";
+                ctx.fillText(t.icon, t.x, t.y - 3);
+                ctx.font = "bold 8px sans-serif"; ctx.fillStyle = "#ffffff";
+                ctx.fillText(t.title, t.x, t.y + 11);
+            });
+
+            if (!isFiring) {
+                const rad = -cannonAngle * Math.PI / 180;
+                ctx.beginPath(); ctx.moveTo(cannonPos.x, cannonPos.y);
+                ctx.lineTo(cannonPos.x + Math.cos(rad) * 180, cannonPos.y + Math.sin(rad) * 180);
+                ctx.strokeStyle = "rgba(244, 63, 94, 0.5)"; ctx.lineWidth = 2;
+                ctx.setLineDash([6, 6]); ctx.stroke(); ctx.setLineDash([]);
+            }
+
+            ctx.save(); ctx.translate(cannonPos.x, cannonPos.y); ctx.rotate(-cannonAngle * Math.PI / 180);
+            let grad = ctx.createLinearGradient(0, -9, 0, 9);
+            grad.addColorStop(0, '#94a3b8'); grad.addColorStop(0.5, '#475569'); grad.addColorStop(1, '#1e293b');
+            ctx.fillStyle = grad; ctx.fillRect(0, -9, 38, 18);
+            ctx.strokeStyle = '#00f0ff'; ctx.lineWidth = 1.5; ctx.strokeRect(0, -9, 38, 18); ctx.restore();
+
+            ctx.beginPath(); ctx.arc(cannonPos.x, cannonPos.y, 14, 0, Math.PI * 2);
+            ctx.fillStyle = '#334155'; ctx.fill(); ctx.strokeStyle = '#00f0ff'; ctx.lineWidth = 2; ctx.stroke();
+
+            if (isFiring) {
+                ctx.save(); ctx.shadowColor = '#fbbf24'; ctx.shadowBlur = 8;
+                ctx.beginPath(); ctx.arc(ball.x, ball.y, 6, 0, Math.PI * 2);
+                ctx.fillStyle = "#fbbf24"; ctx.fill(); ctx.strokeStyle = "#ffffff"; ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+            }
+
+            if (explosionEffect) {
+                ctx.save(); ctx.beginPath(); ctx.arc(explosionEffect.x, explosionEffect.y, explosionEffect.r, 0, Math.PI * 2);
+                ctx.fillStyle = "rgba(251, 191, 36, 0.4)"; ctx.fill();
+                ctx.strokeStyle = "#fbbf24"; ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
+            }
+        }
+
+        function fireCannon() {
+            if (isFiring) return;
+            isFiring = true; cancelAnimationFrame(animId);
+            document.getElementById('fire-btn').style.display = 'none';
+
+            const rad = cannonAngle * Math.PI / 180, speed = 14.5, gravity = 0.38;
+            ball.x = cannonPos.x; ball.y = cannonPos.y;
+            ball.vx = Math.cos(rad) * speed; ball.vy = -Math.sin(rad) * speed;
+
+            function animateProjectile() {
+                ball.x += ball.vx; ball.y += ball.vy; ball.vy += gravity;
+                drawScene();
+
+                let hitTarget = null;
+                for (let t of targets) {
+                    if (Math.hypot(ball.x - t.x, ball.y - t.y) <= t.radius + 6) {
+                        hitTarget = t; break;
+                    }
+                }
+
+                if (hitTarget) {
+                    explosionEffect = { x: hitTarget.x, y: hitTarget.y, r: 8 };
+                    let expTimer = setInterval(() => {
+                        explosionEffect.r += 3; drawScene();
+                        if(explosionEffect.r > 30) clearInterval(expTimer);
+                    }, 20);
+
+                    const resDiv = document.getElementById('prize-result');
+                    if (hitTarget.type === "dulce") {
+                        resDiv.style.color = "#00f0ff"; resDiv.innerText = "🎉 ¡Ganaste 1 Dulce! 🍬";
+                    } else if (hitTarget.type === "decima") {
+                        resDiv.style.color = "#ffd700"; resDiv.innerText = "🏆 ¡Ganaste +2 Décimas! 📝";
+                    } else {
+                        resDiv.style.color = "#f43f5e"; resDiv.innerText = "❌ ¡Sigue intentándolo!";
+                    }
+                    document.getElementById('close-modal-btn').style.display = 'inline-block';
+                } else if (ball.y < canvas.height + 20 && ball.x < canvas.width + 20) {
+                    requestAnimationFrame(animateProjectile);
+                } else {
+                    const resDiv = document.getElementById('prize-result');
+                    resDiv.style.color = "#f43f5e"; resDiv.innerText = "💥 ¡Tiro fallido! Sin premio esta vez.";
+                    document.getElementById('close-modal-btn').style.display = 'inline-block';
+                }
+            }
+            animateProjectile();
+        }
+
+        /* MINIJUEGO 2: SALTO DE LA RANA */
+        const frogCanvas = document.getElementById('frogCanvas');
+        const frogCtx = frogCanvas.getContext('2d');
+        const frogStartPos = { x: 50, y: 135 };
+        const lilyTarget = { x: 440, y: 135, rCenter: 15, rMid: 36, rOuter: 58 };
+
+        let frogState = "AIM_ANGLE", frogAngle = 0, frogAngleSpeed = 1.2;
+        let frogPower = 0, frogPowerSpeed = 2.4;
+        let frogPos = { x: frogStartPos.x, y: frogStartPos.y }, frogTargetX = frogStartPos.x, frogTargetY = frogStartPos.y;
+        let frogAnimId = null, waterSplash = null;
+
+        function openFrogModal() {
+            document.getElementById('frog-modal').style.display = 'flex';
+            document.getElementById('frog-result').innerText = '';
+            document.getElementById('frog-instruction').innerText = '¡Haz clic en la pantalla para fijar la DIRECCIÓN del salto!';
+            document.getElementById('close-frog-btn').style.display = 'none';
+            document.getElementById('power-fill').style.width = '0%';
+            frogState = "AIM_ANGLE"; frogAngle = -25; frogPower = 0;
+            frogPos = { x: frogStartPos.x, y: frogStartPos.y }; waterSplash = null;
+            drawFrogPond(); animateFrogAngle();
+        }
+
+        function animateFrogAngle() {
+            if (frogState !== "AIM_ANGLE") return;
+            frogAngle += frogAngleSpeed;
+            if (frogAngle > 25 || frogAngle < -25) frogAngleSpeed *= -1;
+            drawFrogPond();
+            frogAnimId = requestAnimationFrame(animateFrogAngle);
+        }
+
+        function animateFrogPower() {
+            if (frogState !== "AIM_POWER") return;
+            frogPower += frogPowerSpeed;
+            if (frogPower > 100 || frogPower < 0) frogPowerSpeed *= -1;
+            document.getElementById('power-fill').style.width = `${frogPower}%`;
+            drawFrogPond();
+            frogAnimId = requestAnimationFrame(animateFrogPower);
+        }
+
+        function drawFrogPond() {
+            frogCtx.clearRect(0, 0, frogCanvas.width, frogCanvas.height);
+            let waterGrad = frogCtx.createLinearGradient(0, 0, 0, frogCanvas.height);
+            waterGrad.addColorStop(0, '#0284c7'); waterGrad.addColorStop(0.5, '#0369a1'); waterGrad.addColorStop(1, '#0c4a6e');
+            frogCtx.fillStyle = waterGrad; frogCtx.fillRect(0, 0, frogCanvas.width, frogCanvas.height);
+
+            frogCtx.beginPath(); frogCtx.arc(lilyTarget.x, lilyTarget.y, lilyTarget.rOuter, 0, Math.PI * 2);
+            frogCtx.fillStyle = "#16a34a"; frogCtx.fill(); frogCtx.lineWidth = 3; frogCtx.strokeStyle = "#f43f5e"; frogCtx.stroke();
+            frogCtx.beginPath(); frogCtx.arc(lilyTarget.x, lilyTarget.y, lilyTarget.rMid, 0, Math.PI * 2);
+            frogCtx.fillStyle = "#0284c7"; frogCtx.fill(); frogCtx.strokeStyle = "#00f0ff"; frogCtx.stroke();
+            frogCtx.beginPath(); frogCtx.arc(lilyTarget.x, lilyTarget.y, lilyTarget.rCenter, 0, Math.PI * 2);
+            frogCtx.fillStyle = "#ffd700"; frogCtx.fill(); frogCtx.strokeStyle = "#ffffff"; frogCtx.stroke();
+
+            frogCtx.font = "bold 9px sans-serif"; frogCtx.fillStyle = "#ffffff"; frogCtx.textAlign = "center";
+            frogCtx.fillText("+2 Décimas", lilyTarget.x, lilyTarget.y + 3);
+            frogCtx.fillText("1 Dulce", lilyTarget.x, lilyTarget.y - 22);
+            frogCtx.fillText("Sin Premio", lilyTarget.x, lilyTarget.y + 46);
+
+            if (frogState === "AIM_ANGLE" || frogState === "AIM_POWER") {
+                const rad = frogAngle * Math.PI / 180;
+                frogCtx.save(); frogCtx.beginPath();
+                frogCtx.moveTo(frogStartPos.x, frogStartPos.y);
+                frogCtx.lineTo(frogStartPos.x + Math.cos(rad) * 75, frogStartPos.y + Math.sin(rad) * 75);
+                frogCtx.strokeStyle = "#ffd700"; frogCtx.lineWidth = 4; frogCtx.stroke(); frogCtx.restore();
+            }
+
+            frogCtx.save(); frogCtx.font = "32px sans-serif"; frogCtx.textAlign = "center"; frogCtx.textBaseline = "middle";
+            frogCtx.fillText("🐸", frogPos.x, frogPos.y); frogCtx.restore();
+
+            if (waterSplash) {
+                frogCtx.save(); frogCtx.beginPath(); frogCtx.arc(waterSplash.x, waterSplash.y, waterSplash.r, 0, Math.PI * 2);
+                frogCtx.strokeStyle = "#e0f2fe"; frogCtx.lineWidth = 2.5; frogCtx.stroke(); frogCtx.restore();
+            }
+        }
+
+        function handleFrogClick() {
+            if (frogState === "AIM_ANGLE") {
+                cancelAnimationFrame(frogAnimId); frogState = "AIM_POWER";
+                document.getElementById('frog-instruction').innerText = '¡Haz clic para fijar la POTENCIA de salto!';
+                animateFrogPower();
+            } else if (frogState === "AIM_POWER") {
+                cancelAnimationFrame(frogAnimId); frogState = "JUMPING";
+                document.getElementById('frog-instruction').innerText = '¡En el aire...!';
+                const rad = frogAngle * Math.PI / 180;
+                const jumpDistance = (frogPower / 100) * 420;
+                frogTargetX = frogStartPos.x + Math.cos(rad) * jumpDistance;
+                frogTargetY = frogStartPos.y + Math.sin(rad) * jumpDistance;
+                executeStraightJump();
+            }
+        }
+
+        function executeStraightJump() {
+            const steps = 30; let currentStep = 0;
+            const startX = frogPos.x, startY = frogPos.y;
+
+            function jumpFrame() {
+                currentStep++;
+                let progress = currentStep / steps;
+                frogPos.x = startX + (frogTargetX - startX) * progress;
+                frogPos.y = startY + (frogTargetY - startY) * progress;
+                drawFrogPond();
+
+                if (currentStep < steps) {
+                    requestAnimationFrame(jumpFrame);
+                } else {
+                    frogState = "FINISHED";
+                    waterSplash = { x: frogPos.x, y: frogPos.y, r: 6 };
+                    let splashTimer = setInterval(() => {
+                        waterSplash.r += 4; drawFrogPond();
+                        if(waterSplash.r > 28) clearInterval(splashTimer);
+                    }, 25);
+
+                    const distToTarget = Math.hypot(frogPos.x - lilyTarget.x, frogPos.y - lilyTarget.y);
+                    const resDiv = document.getElementById('frog-result');
+
+                    if (distToTarget <= lilyTarget.rCenter) {
+                        resDiv.style.color = "#ffd700"; resDiv.innerText = "🎯 ¡Aterrizaje Perfecto! Ganaste +2 Décimas 📝";
+                    } else if (distToTarget <= lilyTarget.rMid) {
+                        resDiv.style.color = "#00f0ff"; resDiv.innerText = "🎉 ¡Gran Salto! Ganaste 1 Dulce 🍬";
+                    } else if (distToTarget <= lilyTarget.rOuter) {
+                        resDiv.style.color = "#f43f5e"; resDiv.innerText = "🍃 Caíste en el borde del alga: Sin Premio.";
+                    } else {
+                        resDiv.style.color = "#f43f5e"; resDiv.innerText = "💦 ¡Chapuzón en el agua! Sigue intentándolo.";
+                    }
+                    document.getElementById('close-frog-btn').style.display = 'inline-block';
+                }
+            }
+            jumpFrame();
+        }
+
+        /* MINIJUEGO 3: COFRES MÁGICOS */
+        let chestOpened = false, chestPrizes = [];
+
+        function openChestModal() {
+            document.getElementById('chest-modal').style.display = 'flex';
+            document.getElementById('chest-result').innerText = '';
+            document.getElementById('close-chest-btn').style.display = 'none';
+            chestOpened = false;
+
+            chestPrizes = [
+                { title: "🎉 ¡Ganaste 1 Dulce! 🍬", icon: "🍬", color: "#00f0ff" },
+                { title: "🏆 ¡Ganaste +2 Décimas! 📝", icon: "📝", color: "#ffd700" },
+                { title: "❌ ¡Sigue intentándolo!", icon: "💨", color: "#f43f5e" }
+            ].sort(() => Math.random() - 0.5);
+
+            for(let i = 0; i < 3; i++) {
+                const chest = document.getElementById(`chest-${i}`);
+                chest.innerText = "📦"; chest.style.pointerEvents = "auto"; chest.style.borderColor = "#ffd700";
+            }
+        }
+
+        function openChest(index) {
+            if (chestOpened) return;
+            chestOpened = true;
+
+            const prize = chestPrizes[index];
+            const chest = document.getElementById(`chest-${index}`);
+            chest.innerText = prize.icon; chest.style.borderColor = prize.color;
+
+            for(let i = 0; i < 3; i++) {
+                document.getElementById(`chest-${i}`).style.pointerEvents = "none";
+            }
+
+            const resDiv = document.getElementById('chest-result');
+            resDiv.style.color = prize.color; resDiv.innerText = prize.title;
+            document.getElementById('close-chest-btn').style.display = 'inline-block';
+        }
+
+        function closeModalAndReset() {
+            document.getElementById('projectile-modal').style.display = 'none';
+            document.getElementById('frog-modal').style.display = 'none';
+            document.getElementById('chest-modal').style.display = 'none';
+            document.getElementById('space-travel-screen').style.display = 'none';
+            document.getElementById('game-selection').style.display = 'none';
+            document.getElementById('player-name').value = '';
+            document.getElementById('player-class').value = '';
+            document.getElementById('end').style.display = 'none';
+            document.getElementById('setup').style.display = 'block';
+        }
+
+        switchTab(1);
+    </script>
+    <footer style="text-align: center; margin-top: 40px; padding: 20px 0;">
+        <img src="noelizletra.svg" alt="Logo Noelizz" style="max-width: 180px; height: auto;">
+    </footer>
+</body>
+</html>
